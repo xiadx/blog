@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spark," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Spark运行环境搭建 Mac安装VirtualBox VirtualBox  Mac安装SecureCRT SecureCRT  VirtualBox安装CentOS7-Minimal CentOS7 VirtualBox -&gt; 设置 -&gt; 存储 -&gt; 盘片 VirtualBox -&gt; 设置 -&gt; 网络 -&gt; 桥接网卡  CentOS7静态IP设置 动态IP设">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark运行环境搭建">
+<meta property="og:url" content="http://example.com/2019/09/13/Spark%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="Dingxin&#39;s BLOG">
+<meta property="og:description" content="Spark运行环境搭建 Mac安装VirtualBox VirtualBox  Mac安装SecureCRT SecureCRT  VirtualBox安装CentOS7-Minimal CentOS7 VirtualBox -&gt; 设置 -&gt; 存储 -&gt; 盘片 VirtualBox -&gt; 设置 -&gt; 网络 -&gt; 桥接网卡  CentOS7静态IP设置 动态IP设">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-09-13T09:25:44.000Z">
+<meta property="article:modified_time" content="2023-09-10T11:50:54.901Z">
+<meta property="article:author" content="Dingxin">
+<meta property="article:tag" content="Spark">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2019/09/13/Spark运行环境搭建/"/>
+
+
+
+
+
+  <title>Spark运行环境搭建 | Dingxin's BLOG</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dingxin's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/09/13/Spark%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dingxin's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spark运行环境搭建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-13T17:25:44+08:00">
+                2019-09-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spark/" itemprop="url" rel="index">
+                    <span itemprop="name">Spark</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Spark运行环境搭建</p>
+<h2 id="Mac安装VirtualBox"><a href="#Mac安装VirtualBox" class="headerlink" title="Mac安装VirtualBox"></a>Mac安装VirtualBox</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a></li>
+</ul>
+<h2 id="Mac安装SecureCRT"><a href="#Mac安装SecureCRT" class="headerlink" title="Mac安装SecureCRT"></a>Mac安装SecureCRT</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.vandyke.com/products/securecrt/">SecureCRT</a></li>
+</ul>
+<h2 id="VirtualBox安装CentOS7-Minimal"><a href="#VirtualBox安装CentOS7-Minimal" class="headerlink" title="VirtualBox安装CentOS7-Minimal"></a>VirtualBox安装CentOS7-Minimal</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://vault.centos.org/">CentOS7</a></li>
+<li>VirtualBox -&gt; 设置 -&gt; 存储 -&gt; 盘片</li>
+<li>VirtualBox -&gt; 设置 -&gt; 网络 -&gt; 桥接网卡</li>
+</ul>
+<h2 id="CentOS7静态IP设置"><a href="#CentOS7静态IP设置" class="headerlink" title="CentOS7静态IP设置"></a>CentOS7静态IP设置</h2><ul>
+<li><p>动态IP设置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ping www.baidu.com</span><br><span class="line">/* Output:</span><br><span class="line">ping: www.baidu.com: Name or service not known</span><br><span class="line">*///:~</span><br><span class="line">vi /etc/sysconfig/network-scripts/ifcfg-enp0s3</span><br><span class="line">/* Input:</span><br><span class="line">ONBOOT=yes</span><br><span class="line">*///:~</span><br><span class="line">service network restart</span><br><span class="line">ping www.baidu.com</span><br><span class="line">/* Output:</span><br><span class="line">PING www.a.shifen.com (182.61.200.7) 56(84) bytes of data.</span><br><span class="line">...</span><br><span class="line">*///:~</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看DNS</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/resolv.conf</span><br><span class="line">/* Output:</span><br><span class="line">211.100.225.34</span><br><span class="line">124.207.160.106</span><br><span class="line">*///:~</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看Mac局域网IP</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br><span class="line">/* Output:</span><br><span class="line">...</span><br><span class="line">en0: flags=8863&lt;UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST&gt; mtu 1500</span><br><span class="line">        ether 88:e9:fe:53:af:ef </span><br><span class="line">        inet6 fe80::8c0:3e8a:b41a:98b9%en0 prefixlen 64 secured scopeid 0x6 </span><br><span class="line">        inet 192.168.1.101 netmask 0xffffff00 broadcast 192.168.1.255</span><br><span class="line">        nd6 options=201&lt;PERFORMNUD,DAD&gt;</span><br><span class="line">        media: autoselect</span><br><span class="line">        status: active</span><br><span class="line">...</span><br><span class="line">*///:~</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>静态IP设置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sysconfig/network-scripts/ifcfg-enp0s3</span><br><span class="line">/* Input:</span><br><span class="line">DEVICE=enp0s3</span><br><span class="line">TYPE=Ethernet</span><br><span class="line">ONBOOT=yes</span><br><span class="line">BOOTPROTO=static</span><br><span class="line">IPADDR=192.168.1.108</span><br><span class="line">NETMASK=255.255.255.0</span><br><span class="line">GATEWAY=192.168.1.1</span><br><span class="line">DNS1=211.100.225.34</span><br><span class="line">DNS2.124.207.160.106</span><br><span class="line">*///:~</span><br><span class="line">service network restart</span><br><span class="line">ping www.baidu.com</span><br><span class="line">/* Output:</span><br><span class="line">PING www.a.shifen.com (182.61.200.7) 56(84) bytes of data.</span><br><span class="line">...</span><br><span class="line">*///:~</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="VirtualBox生成备份"><a href="#VirtualBox生成备份" class="headerlink" title="VirtualBox生成备份"></a>VirtualBox生成备份</h2><ul>
+<li>VirtualBox -&gt; 生成 -&gt; 备份</li>
+</ul>
+<h2 id="SecureCRT连接VirtualBoxCentOS7"><a href="#SecureCRT连接VirtualBoxCentOS7" class="headerlink" title="SecureCRT连接VirtualBoxCentOS7"></a>SecureCRT连接VirtualBoxCentOS7</h2><ul>
+<li>SecureCRT -&gt; Connect -&gt; Quick Connect -&gt; Hostname(192.168.1.108) -&gt; Username(root) PublicKey -&gt; Properties -&gt; Use identity or certificate file(&#x2F;Users&#x2F;xdx&#x2F;.ssh&#x2F;id_rsa.pub)</li>
+<li>SecureCRT -&gt; Options -&gt; Session Options -&gt; Appearance -&gt; Solarized Darcula -&gt; Font</li>
+</ul>
+<h2 id="Mac终端文件夹颜色设置"><a href="#Mac终端文件夹颜色设置" class="headerlink" title="Mac终端文件夹颜色设置"></a>Mac终端文件夹颜色设置</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bash_profile</span><br><span class="line">/* Input:</span><br><span class="line">export LC_ALL=en_US.UTF-8</span><br><span class="line">export LANG=en_US.UTF-8</span><br><span class="line"></span><br><span class="line">export CLICOLOR=1</span><br><span class="line">export LSCOLORS=Exfxcxdxbxegedabagacad</span><br><span class="line">export GREP_OPTIONS=&quot;--color=auto&quot;</span><br><span class="line">*///:~</span><br><span class="line">source ~/.bash_profile</span><br></pre></td></tr></table></figure>
+
+<h2 id="VIM安装与配置"><a href="#VIM安装与配置" class="headerlink" title="VIM安装与配置"></a>VIM安装与配置</h2><ul>
+<li><p>VIM安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install vim</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>VIM配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.vimrc</span><br><span class="line">/* Input:</span><br><span class="line">syntax on</span><br><span class="line">set tabstop=4</span><br><span class="line">set shiftwidth=4</span><br><span class="line">set softtabstop=4</span><br><span class="line">set smarttab</span><br><span class="line">set expandtab</span><br><span class="line">set encoding=utf-8</span><br><span class="line">*///:~</span><br><span class="line">source ~/.vimrc</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="CentOS7关闭防火墙和SELinux"><a href="#CentOS7关闭防火墙和SELinux" class="headerlink" title="CentOS7关闭防火墙和SELinux"></a>CentOS7关闭防火墙和SELinux</h2><ul>
+<li><p>关闭防火墙</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld.service</span><br><span class="line">systemctl disable firewalld.service</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关闭SELinux</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysconfig/selinux</span><br><span class="line">/* Input:</span><br><span class="line">SELINUX=disabled</span><br><span class="line">*///:~</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="安装lrzsz"><a href="#安装lrzsz" class="headerlink" title="安装lrzsz"></a>安装lrzsz</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install lrzsz</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a>安装JDK</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">downloads</a></p>
+</li>
+<li><p>getconf LONG_BIT</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">getconf LONG_BIT</span><br><span class="line">/* Output:</span><br><span class="line">64</span><br><span class="line">*///:~</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装JDK</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">jdk-7u80-linux-x64.tar.gz</span><br><span class="line">rz -bye</span><br><span class="line">mkdir /usr/java</span><br><span class="line">tar -zxvf jdk-7u80-linux-x64.tar.gz -C /usr/java</span><br><span class="line">vim ~/.bash_profile</span><br><span class="line">/* Input:</span><br><span class="line"># JAVA</span><br><span class="line">export JAVA_HOME=/usr/java/jdk1.7.0</span><br><span class="line">export PATH=$PATH:$JAVA_HOME/bin</span><br><span class="line">export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br><span class="line">*///:~</span><br><span class="line">source ~/.bash_profile</span><br><span class="line">java -version</span><br><span class="line">/* Output:</span><br><span class="line">java version &quot;1.7.0_80&quot;</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.7.0_80-b15)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 24.80-b11, mixed mode)</span><br><span class="line">*///:~</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="安装Scala"><a href="#安装Scala" class="headerlink" title="安装Scala"></a>安装Scala</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://www.scala-lang.org/download/">downloads</a></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget</span><br><span class="line">wget http://downloads.typesafe.com/scala/2.11.5/scala-2.11.5.tgz</span><br><span class="line">mkdir /usr/local/scala</span><br><span class="line">tar -zxvf scala-2.11.5.tgz -C /usr/local/scala</span><br><span class="line">vim ~/.bash_profile</span><br><span class="line">/* Input:</span><br><span class="line"># SCALA</span><br><span class="line">export SCALA_HOME=/usr/local/scala/scala-2.11.5</span><br><span class="line">export PATH=$PATH:$SCALA_HOME/bin</span><br><span class="line">*///:~</span><br><span class="line">source ~/.bash_profile</span><br><span class="line">scala -version</span><br><span class="line">/* Output:</span><br><span class="line">Scala code runner version 2.11.5 -- Copyright 2002-2013, LAMP/EPFL</span><br><span class="line">*///:~</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装Spark"><a href="#安装Spark" class="headerlink" title="安装Spark"></a>安装Spark</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://spark.apache.org/downloads.html">downloads</a></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">wget http://archive.apache.org/dist/spark/spark-1.2.0/spark-1.2.0-bin-hadoop1.tgz</span><br><span class="line">mkdir /usr/local/spark</span><br><span class="line">tar -zxvf spark-1.2.0-bin-hadoop1.tgz -C /usr/local/spark</span><br><span class="line">vim ~/.bash_profile</span><br><span class="line">/* Input:</span><br><span class="line"># SPARK</span><br><span class="line">export SPARK_HOME=/usr/local/spark/spark-1.2.0-bin-hadoop1</span><br><span class="line">export PATH=$PATH:$SPARK_HOME/bin</span><br><span class="line">export CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib:$JAVA_HOME/jre/lib</span><br><span class="line">*///:~</span><br><span class="line">source ~/.bash_profile</span><br><span class="line">pyspark --master local[2]</span><br><span class="line">/* Output:</span><br><span class="line">Python 2.7.5 (default, Oct 30 2018, 23:45:53)</span><br><span class="line">...</span><br><span class="line">*///:~</span><br><span class="line">&gt;&gt;&gt; exit()</span><br><span class="line">cd /usr/local/spark/spark-1.2.0-bin-hadoop1/conf/</span><br><span class="line">cp spark-env.sh.template spark-env.sh</span><br><span class="line">vim spark-env.sh</span><br><span class="line">/* Input:</span><br><span class="line">export SPARK_MASTER_IP=127.0.0.1</span><br><span class="line">export SPARK_LOCAL_IP=127.0.0.1</span><br><span class="line">*///:~</span><br><span class="line">cd ~</span><br><span class="line">spark-shell</span><br><span class="line">/* Output:</span><br><span class="line">Spark assembly has been built with Hive, including Datanucleus jars on classpath</span><br><span class="line">...</span><br><span class="line">scala&gt; </span><br><span class="line">*///:~</span><br><span class="line">scala&gt; :q</span><br></pre></td></tr></table></figure>
+
+<h2 id="WordCount"><a href="#WordCount" class="headerlink" title="WordCount"></a>WordCount</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/spark/spark-1.2.0-bin-hadoop1/bin</span><br><span class="line">spark-shell</span><br><span class="line">scala&gt; val lines = sc.textFile(&quot;../README.md&quot;, 2)</span><br><span class="line">/* Output:</span><br><span class="line">19/09/14 10:35:42 INFO MemoryStore: ensureFreeSpace(32768) called with curMem=0, maxMem=280248975</span><br><span class="line">19/09/14 10:35:42 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 32.0 KB, free 267.2 MB)</span><br><span class="line">19/09/14 10:35:42 INFO MemoryStore: ensureFreeSpace(4959) called with curMem=32768, maxMem=280248975</span><br><span class="line">19/09/14 10:35:42 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 4.8 KB, free 267.2 MB)</span><br><span class="line">19/09/14 10:35:42 INFO BlockManagerInfo: Added broadcast_0_piece0 in memory on localhost:42664 (size: 4.8 KB, free: 267.3 MB)</span><br><span class="line">19/09/14 10:35:42 INFO BlockManagerMaster: Updated info of block broadcast_0_piece0</span><br><span class="line">19/09/14 10:35:42 INFO SparkContext: Created broadcast 0 from textFile at &lt;console&gt;:12</span><br><span class="line">lines: org.apache.spark.rdd.RDD[String] = ../README.md MappedRDD[1] at textFile at &lt;console&gt;:12</span><br><span class="line">*///:~</span><br><span class="line">scala&gt; val words = lines.flatMap(line =&gt; line.split(&quot; &quot;))</span><br><span class="line">/* Output:</span><br><span class="line">words: org.apache.spark.rdd.RDD[String] = FlatMappedRDD[2] at flatMap at &lt;console&gt;:14</span><br><span class="line">*///:~</span><br><span class="line">scala&gt; val ones = words.map(w =&gt; (w, 1))</span><br><span class="line">/* Output:</span><br><span class="line">ones: org.apache.spark.rdd.RDD[(String, Int)] = MappedRDD[3] at map at &lt;console&gt;:16</span><br><span class="line">*///:~</span><br><span class="line">scala&gt; val counts = ones.reduceByKey(_ + _)</span><br><span class="line">/* Output:</span><br><span class="line">19/09/14 10:41:24 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">19/09/14 10:41:24 WARN LoadSnappy: Snappy native library not loaded</span><br><span class="line">19/09/14 10:41:24 INFO FileInputFormat: Total input paths to process : 1</span><br><span class="line">counts: org.apache.spark.rdd.RDD[(String, Int)] = ShuffledRDD[4] at reduceByKey at &lt;console&gt;:18</span><br><span class="line">*///:~</span><br><span class="line">scala&gt; counts.foreach(println)</span><br><span class="line">/* Output:</span><br><span class="line">...</span><br><span class="line">(For,2)</span><br><span class="line">(processing.,1)</span><br><span class="line">(Spark,15)</span><br><span class="line">(particular,3)</span><br><span class="line">(Programs,1)</span><br><span class="line">(The,1)</span><br><span class="line">...</span><br><span class="line">*///:~</span><br><span class="line">scala&gt; :q</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"># Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/13/Spark1.3.0%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" rel="next" title="Spark1.3.0集群搭建">
+                <i class="fa fa-chevron-left"></i> Spark1.3.0集群搭建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/14/%E5%89%96%E6%9E%90spark-shell/" rel="prev" title="剖析spark-shell">
+                剖析spark-shell <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/xiadx" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Mac%E5%AE%89%E8%A3%85VirtualBox"><span class="nav-number">1.</span> <span class="nav-text">Mac安装VirtualBox</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mac%E5%AE%89%E8%A3%85SecureCRT"><span class="nav-number">2.</span> <span class="nav-text">Mac安装SecureCRT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VirtualBox%E5%AE%89%E8%A3%85CentOS7-Minimal"><span class="nav-number">3.</span> <span class="nav-text">VirtualBox安装CentOS7-Minimal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CentOS7%E9%9D%99%E6%80%81IP%E8%AE%BE%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text">CentOS7静态IP设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VirtualBox%E7%94%9F%E6%88%90%E5%A4%87%E4%BB%BD"><span class="nav-number">5.</span> <span class="nav-text">VirtualBox生成备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SecureCRT%E8%BF%9E%E6%8E%A5VirtualBoxCentOS7"><span class="nav-number">6.</span> <span class="nav-text">SecureCRT连接VirtualBoxCentOS7</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mac%E7%BB%88%E7%AB%AF%E6%96%87%E4%BB%B6%E5%A4%B9%E9%A2%9C%E8%89%B2%E8%AE%BE%E7%BD%AE"><span class="nav-number">7.</span> <span class="nav-text">Mac终端文件夹颜色设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VIM%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="nav-number">8.</span> <span class="nav-text">VIM安装与配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CentOS7%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99%E5%92%8CSELinux"><span class="nav-number">9.</span> <span class="nav-text">CentOS7关闭防火墙和SELinux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85lrzsz"><span class="nav-number">10.</span> <span class="nav-text">安装lrzsz</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85JDK"><span class="nav-number">11.</span> <span class="nav-text">安装JDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Scala"><span class="nav-number">12.</span> <span class="nav-text">安装Scala</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Spark"><span class="nav-number">13.</span> <span class="nav-text">安装Spark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WordCount"><span class="nav-number">14.</span> <span class="nav-text">WordCount</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dingxin</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
