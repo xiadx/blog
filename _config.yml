@@ -103,4 +103,6 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
+  type: 'git'
+  repo: https://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@github.com/xiadx/xiadx.github.io
+  branch: master

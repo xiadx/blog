@@ -2404,25 +2404,498 @@ public:
 
 ## 数字字符串转化成IP地址
 
+> 描述
+现在有一个只包含数字的字符串，将该字符串转化成IP地址的形式，返回所有可能的情况。
+例如：
+给出的字符串为"25525522135",
+返回["255.255.22.135", "255.255.221.35"]. (顺序没有关系)
+```
+class Solution {
+public:
+    /**
+     * 
+     * @param s string字符串 
+     * @return string字符串vector
+     */
+    void dfs(string &s, vector<string> &result, vector<int> segments, int seg_id, int seg_start, int n) {
+        if (seg_id == 4) {
+            if (seg_start == n) {
+                string addr = "";
+                for (int i = 0; i < 4; ++i) {
+                    addr += to_string(segments[i]);
+                    if (i != 3) addr += ".";
+                }
+                result.push_back(addr);
+            } else return;
+        } else {
+            if (seg_start == n) return;
+            if (s[seg_start] == '0') {
+                segments.push_back(0);
+                dfs(s, result, segments, seg_id+1, seg_start+1, n);
+                segments.pop_back();
+            }
+            int code = 0;
+            for (int seg_end = seg_start; seg_end < n; ++seg_end) {
+                code = code * 10 + (s[seg_end] - '0');
+                if (code > 0 && code <= 0xFF) {
+                    segments.push_back(code);
+                    dfs(s, result, segments, seg_id+1, seg_end+1, n);
+                    segments.pop_back();
+                } else break;
+            }
+        }
+    }
+    vector<string> restoreIpAddresses(string s) {
+        // write code here
+        vector<string> result;
+        vector<int> segments;
+        int n = s.size();
+        if (n == 0) return result;
+        dfs(s, result, segments, 0, 0, n);
+        return result;
+    }
+};
+```
 
+## 链表内指定区间反转
 
+> 描述
+将一个节点数为 size 链表 m 位置到 n 位置之间的区间反转，要求时间复杂度 O(n)，空间复杂度 O(1)。
+```
+/**
+ * struct ListNode {
+ *	int val;
+ *	struct ListNode *next;
+ *	ListNode(int x) : val(x), next(nullptr) {}
+ * };
+ */
+class Solution {
+public:
+    /**
+     * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可
+     *
+     * 
+     * @param head ListNode类 
+     * @param m int整型 
+     * @param n int整型 
+     * @return ListNode类
+     */
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        // write code here
+        if (head == nullptr) return nullptr;
+        auto *dummy = new ListNode(0);
+        dummy->next = head;
+        ListNode *pre_begin = nullptr, *nxt_end = nullptr, *begin = nullptr, *end = nullptr;
+        ListNode *cur = head, *pre = dummy, *nxt = nullptr;
+        int i = 1;
+        while (i < m) {
+            cur = cur->next;
+            pre = pre->next;
+            ++i;
+        }
+        pre_begin = pre;
+        begin = cur;
+        cur = head;
+        i = 1;  
+        while (i < n) {
+            cur = cur->next;
+            ++i;
+        }
+        end = cur;
+        nxt_end = end->next;
+        end->next = nullptr;
 
+        cur = begin;
+        pre = nullptr;
+        while (cur) {
+            nxt = cur->next;
+            cur->next = pre;
+            pre = cur;
+            cur = nxt;
+        }
+        pre_begin->next = end;
+        begin->next = nxt_end;
+        return dummy->next;
+    }
+};
+```
 
+## 子集-ii
 
+描述
+> 给出一个可能包含重复元素的整数集合S，返回该整数集合的所有子集。
+注意：你给出的子集中的元素要按非递减的顺序排列,给出的解集中不能包含重复的子集
+```
+class Solution {
+public:
+    void dfs(set<vector<int>> &res, vector<int> &path, vector<int> &S, int index, int n) {
+        res.insert(path);
+        if (index == n) return;
+        dfs(res, path, S, index+1, n);
+        path.push_back(S[index]);
+        dfs(res, path, S, index+1, n);
+        path.pop_back();
+    }
+    vector<vector<int> > subsetsWithDup(vector<int> &S) {
+        int n = S.size();
+        set<vector<int> > res;
+        vector<int> path;
+        sort(S.begin(), S.end());
+        dfs(res, path, S, 0, n);
+        return vector<vector<int> >(res.begin(), res.end());
+    }
+};
+```
 
+## 解密
 
+描述
+> 一条仅包含字母‘A’-‘Z’的消息用下列的方式加密成数字
+'A' -> 1
+'B' -> 2
+...
+'Z' -> 26
+现在给出加密成数字的密文，请判断有多少种解密的方法
+```
+class Solution {
+public:
+    /**
+     * 
+     * @param s string字符串 
+     * @return int整型
+     */
+    int numDecodings(string s) {
+        int n = s.size();
+        if (n == 0) return 0;
+        if (s == "0") return 0;
+        int index = s.rfind('0');
+        if (index == 0) return 0;
+        if (index > 0 && s[index-1] != '1' && s[index-1] != '2') return 0;
+        vector<int> dp(n, 1);
+        for (int i = 1; i < n; ++i) {
+            if ((s[i-1] == '1' && s[i] != '0') || (s[i-1] == '2' && s[i] >= '1' && s[i] <= '6')) {
+                if (i == 1) dp[i] = 2;
+                else dp[i] = dp[i-1] + dp[i-2];
+            }
+            else if (s[i] == '0') {
+                 if (i == 1) dp[i] = 1;
+                 else dp[i] = dp[i-2];
+            }
+            else {
+                dp[i] = dp[i-1];
+            }
+        }
+        return dp[n-1];
+    }
+};
+```
 
+## 格雷码
 
+描述
+> 格雷码是一种二进制编码系统，如果任意两个相邻的代码只有一位二进制数不同，则称这种编码为格雷码（Gray Code）
+> 给定一个非负整数n，表示代码的位数，打印格雷码的序列。格雷码序列必须以0开头
+```
+class Solution {
+public:
+    /**
+     * 
+     * @param n int整型 
+     * @return int整型vector
+     */
+    vector<int> grayCode(int n) {
+       vector<int> res;
+       res.push_back(0);
+       if (n == 0) return res;
+       for (int i = 1; i <= n; ++i) {
+            int m = res.size();
+            for (int j = m - 1; j >= 0; --j) {
+                res.push_back(res[j] | (1 << (i-1)));
+            }
+       }
+       return res;
+    }
+};
+```
 
+## 合并两个有序的数组
 
+描述
+> 给出一个有序的整数数组 A 和有序的整数数组 B ，请将数组 B 合并到数组 A 中，变成一个有序的升序数组
+```
+class Solution {
+public:
+    void merge(int A[], int m, int B[], int n) {
+//         for (int i = 0; i < n; ++i) {
+//             A[m + i] = B[i];
+//         }
+//         sort(A, A + m + n);
+        if (n == 0) return;
+        if (m == 0) {
+            for (int j = 0; j < n; ++j) {
+                A[j] = B[j];
+            }
+            return;
+        }
+        int i = m - 1, j = n - 1, index = m + n - 1;
+        while (i >= 0 && j >= 0) {
+            if (A[i] > B[j]) A[index--] = A[i--];
+            else A[index--] = B[j--];
+        }
+        while (j >= 0) {
+            A[index--] = B[j--];
+        }
+    }
+};
+```
 
+## 搅乱字符串
 
+描述
+> 给出两个长度相同的字符串s1 和 s2，请判断s2是否是s1的乱序字符串
+```
+class Solution {
+public:
+    /**
+     * 
+     * @param s1 string字符串 
+     * @param s2 string字符串 
+     * @return bool布尔型
+     */
+    bool dfs(string s1, string s2) {
+        int n = s1.size(), m = s2.size();
+        if (n != m) return false;
+        if (s1 == s2) return true;
+        unordered_map<char, int> mp;
+        for (int i = 0; i < n; ++i) {
+            ++mp[s1[i]]; --mp[s2[i]];
+        }
+        for (auto it = mp.begin(); it != mp.end(); ++it) {
+            if (it->second != 0) return false;
+        }
 
+        for (int i = 1; i < n; ++i) {
+            if (dfs(s1.substr(0, i), s2.substr(0, i)) && dfs(s1.substr(i), s2.substr(i))) return true;
+            if (dfs(s1.substr(0, i), s2.substr(n-i)) && dfs(s1.substr(i), s2.substr(0, n-i))) return true;
+        }
 
+        return false;
+    }
+    bool isScramble(string s1, string s2) {
+        return dfs(s1, s2);
+    }
+};
+```
 
+## 划分链表
 
+描述
+> 给出一个长度为 n 的单链表和一个值 x ，单链表的每一个值为 listi ，请返回一个链表的头结点，要求新链表中小于 x 的节点全部在大于等于 x 的节点左侧，并且两个部分之内的节点之间与原来的链表要保持相对顺序不变
+```
+/**
+ * struct ListNode {
+ *	int val;
+ *	struct ListNode *next;
+ *	ListNode(int x) : val(x), next(nullptr) {}
+ * };
+ */
+class Solution {
+public:
+    /**
+     * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可
+     *
+     * 
+     * @param head ListNode类 
+     * @param x int整型 
+     * @return ListNode类
+     */
+    ListNode* partition(ListNode* head, int x) {
+        if (!head || !head->next) return head;
+        ListNode *d1 = new ListNode(-1);
+        ListNode *d2 = new ListNode(-1);
+        ListNode *t1 = d1, *t2 = d2;
+        ListNode *cur = head;
+        while (cur) {
+            if (cur->val < x) {
+                t1->next = cur;
+                t1 = t1->next;
+            }
+            else {
+                t2->next = cur;
+                t2 = t2->next;
+            }
+            cur = cur->next;
+        }
+        t1->next = d2->next;
+        t2->next = nullptr;
+        return d1->next;
+    }
+};
+```
 
+## 最大的长方形
 
+描述
+> 给出一个只包含0和1的二维矩阵，找出最大的全部元素都是1的长方形区域，返回该区域的面积
+```
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char> > &matrix) {
+        int n = matrix.size();
+        if (n == 0) return 0;
+        int m = matrix[0].size();
+        vector<vector<int> > hist(n, vector<int>(m, 0));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (matrix[i][j] == '1') {
+                    int index = i;
+                    int ans = 0;
+                    while (index >= 0 && matrix[index][j] == '1') {
+                        ++ans;
+                        --index;
+                    }
+                    hist[i][j] = ans;
+                }
+            }
+        }
+        int res = 0;
+        for (int i = 0; i < n; ++i) {
+            stack<int> mono_stack;
+            vector<int> left(m, -1), right(m, m);
+            for (int j = 0; j < m; ++j) {
+                while (!mono_stack.empty() && hist[i][mono_stack.top()] >= hist[i][j]) {
+                    right[mono_stack.top()] = j;
+                    mono_stack.pop();
+                }
+                left[j] = mono_stack.empty() ? -1 : mono_stack.top();
+                mono_stack.push(j);
+            }
+            for (int j = 0; j < m; ++j) {
+                res = max(res, (right[j] - left[j] - 1) * hist[i][j]);
+            }
+        }
+        return res; 
+    }
+};
+```
 
+## 直方图中的最大矩形
+
+描述
+> 给出n个数字，代表直方图的条高，直方图每一条的宽度为1，请计算直方图中最大矩形的面积
+```
+class Solution {
+public:
+    /**
+     * 
+     * @param height int整型vector 
+     * @return int整型
+     */
+    int largestRectangleArea(vector<int>& height) {
+        int n = height.size();
+        if (n == 0) return 0;
+        vector<int> left(n, -1);
+        vector<int> right(n, n);
+        stack<int> mono_stack;
+
+        for (int i = 0; i < n; ++i) {
+            while (!mono_stack.empty() && height[mono_stack.top()] >= height[i]) {
+                right[mono_stack.top()] = i;
+                mono_stack.pop();
+            }
+            left[i] = mono_stack.empty() ? -1 : mono_stack.top();
+            mono_stack.push(i);
+        }
+
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            ans = max(ans, (right[i] - left[i] - 1) * height[i]);
+        }
+        return ans;
+    }
+};
+```
+
+## 删除有序链表中重复的元素-II
+
+描述
+> 给出一个升序排序的链表，删除链表中的所有重复出现的元素，只保留原链表中只出现一次的元素
+```
+/**
+ * struct ListNode {
+ *	int val;
+ *	struct ListNode *next;
+ *	ListNode(int x) : val(x), next(nullptr) {}
+ * };
+ */
+class Solution {
+public:
+    /**
+     * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可
+     *
+     * 
+     * @param head ListNode类 
+     * @return ListNode类
+     */
+    ListNode* deleteDuplicates(ListNode* head) {
+        if (!head || !head->next) return head;
+        ListNode *dummy = new ListNode(0);
+        dummy->next = head;
+        ListNode *pre = dummy, *cur = head;
+        while (cur) {
+            if (!cur->next || cur->next && cur->val != cur->next->val) {
+                pre = cur;
+                cur = cur->next;
+            } 
+            else {
+                while (cur->next && cur->val == cur->next->val) cur = cur->next;
+                pre->next = cur->next;
+                cur = cur->next;
+            }
+        }
+        return dummy->next;
+    }
+};
+```
+
+## 删除有序链表中重复的元素-I
+
+描述
+> 删除给出链表中的重复元素（链表中元素从小到大有序），使链表中的所有元素都只出现一次
+```
+/**
+ * struct ListNode {
+ *	int val;
+ *	struct ListNode *next;
+ *	ListNode(int x) : val(x), next(nullptr) {}
+ * };
+ */
+class Solution {
+public:
+    /**
+     * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可
+     *
+     * 
+     * @param head ListNode类 
+     * @return ListNode类
+     */
+    ListNode* deleteDuplicates(ListNode* head) {
+        // write code here
+        if (head == nullptr) return nullptr;
+        ListNode *pre = head, *cur = head;
+        while (cur) {
+           while (cur->next != nullptr && cur->val == cur->next->val) {
+                cur = cur->next;
+           }
+           pre->next = cur->next;
+           pre = pre->next;
+           if (pre == nullptr) return head;
+           else cur = pre;
+
+        }
+        return head;
+    }
+};
+```
 
 
