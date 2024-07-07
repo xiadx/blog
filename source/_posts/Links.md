@@ -23,4 +23,5 @@ categories: Links
 ## Github
 - [Github加速](https://github.com/521xueweihan/GitHub520)
 
-
+## Oh-My-Zsh
+- [Oh-My-Zsh](https://github.com/ohmyzsh/ohmyzsh)
