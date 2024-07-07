@@ -25,3 +25,6 @@ categories: Links
 
 ## Oh-My-Zsh
 - [Oh-My-Zsh](https://github.com/ohmyzsh/ohmyzsh)
+
+## SSR
+- [SSR](https://github.com/YeYoot/ssr_tools)
