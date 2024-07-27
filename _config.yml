@@ -105,4 +105,4 @@ theme: next
 deploy:
   type: 'git'
   repo: https://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@github.com/xiadx/xiadx.github.io
-  branch: main
+  branch: master
